@@ -1,24 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lithuanian Learner Application</title>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-sans,system-ui);background:transparent;}
+#app{max-width:560px;margin:0 auto;padding:1rem;}
+.card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,#e0e0e0);border-radius:12px;padding:1.5rem;}
+.btn{display:block;width:100%;padding:13px 18px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:8px;background:transparent;color:var(--color-text-primary,#111);font-size:15px;cursor:pointer;text-align:center;transition:background .12s;}
+.btn:hover{background:var(--color-background-secondary,#f5f5f5);}
+.btn-primary{background:var(--color-text-primary,#111);color:var(--color-background-primary,#fff);border-color:var(--color-text-primary,#111);}
+.btn-primary:hover{opacity:.85;background:var(--color-text-primary,#111);}
+.btn.ok{background:var(--color-background-success,#eafaee);border-color:var(--color-border-success,#4caf50);color:var(--color-text-success,#2e7d32);pointer-events:none;}
+.btn.ko{background:var(--color-background-danger,#fdecea);border-color:var(--color-border-danger,#e53935);color:var(--color-text-danger,#c62828);pointer-events:none;}
+input[type=text]{width:100%;padding:11px 14px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:8px;font-size:15px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#111);}
+input:focus{outline:none;border-color:var(--color-border-primary,#999);}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-secondary,#666);margin-bottom:10px;}
+.pbar{height:6px;background:var(--color-background-secondary,#eee);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.pfill{height:100%;background:#4caf50;border-radius:3px;transition:width .3s;}
+.meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.score-box{font-size:13px;color:var(--color-text-secondary,#666);}
+.score-box b{color:var(--color-text-primary,#111);}
+.combo{color:#4caf50;font-size:12px;margin-left:4px;}
+.hint{font-size:12px;color:var(--color-text-secondary,#666);margin-top:4px;}
+.fb{padding:11px 14px;border-radius:8px;font-size:14px;margin-top:10px;}
+.fb.ok{background:var(--color-background-success,#eafaee);color:var(--color-text-success,#2e7d32);}
+.fb.ko{background:var(--color-background-danger,#fdecea);color:var(--color-text-danger,#c62828);}
+.stat{background:var(--color-background-secondary,#f5f5f5);border-radius:8px;padding:1rem;text-align:center;}
+.stat p{font-size:12px;color:var(--color-text-secondary,#666);margin-bottom:4px;}
+.stat h3{font-size:22px;font-weight:500;}
+.err-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,#eee);font-size:14px;}
+.theme-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:14px 16px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:8px;background:transparent;color:var(--color-text-primary,#111);font-size:15px;cursor:pointer;text-align:left;transition:background .12s;}
+.theme-btn:hover{background:var(--color-background-secondary,#f5f5f5);}
+.ready-pill{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--color-background-success,#eafaee);color:var(--color-text-success,#2e7d32);}
+.gen-pill{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--color-background-secondary,#f0f0f0);color:var(--color-text-secondary,#888);}
+.mode-btn{display:flex;align-items:center;gap:14px;width:100%;padding:14px 16px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:8px;background:transparent;color:var(--color-text-primary,#111);font-size:15px;cursor:pointer;text-align:left;transition:background .12s;}
+.mode-btn:hover{background:var(--color-background-secondary,#f5f5f5);}
+.mode-btn.selected{border-color:var(--color-border-primary,#999);background:var(--color-background-secondary,#f5f5f5);}
+.mode-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0;}
+.mode-info{display:flex;flex-direction:column;gap:2px;}
+.mode-title{font-size:15px;font-weight:500;}
+.mode-desc{font-size:12px;color:var(--color-text-secondary,#888);}
+.back-btn{display:flex;align-items:center;gap:6px;background:none;border:none;cursor:pointer;color:var(--color-text-secondary,#888);font-size:14px;padding:0 0 14px;width:fit-content;}
+.back-btn:hover{color:var(--color-text-primary,#111);}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+</style>
 </head>
 <body>
-    <h1>Welcome to the Lithuanian Learner Application</h1>
-    <p>This application is designed to help users learn the Lithuanian language through various interactive tools and resources.</p>
-    <h2>Features</h2>
-    <ul>
-        <li>Vocabulary Building</li>
-        <li>Grammar Exercises</li>
-        <li>Listening Practice</li>
-        <li>Speaking Activities</li>
-        <li>Cultural Insights</li>
-    </ul>
-    <h2>Getting Started</h2>
-    <p>To get started, please create an account and log in to access personalized learning paths and progress tracking.</p>
-    <h2>Contact Us</h2>
-    <p>If you have any questions or feedback, please reach out to us at info@lithuanianlearner.com.</p>
+<div id="app"></div>
+<script>
+const MODES=[
+  {id:'mix',icon:'🎲',title:'Mix',desc:'All exercise types combined'},
+  {id:'flashcard',icon:'🃏',title:'Flashcards',desc:'Reveal & self-assess'},
+  {id:'mcq',icon:'✅',title:'Multiple choice',desc:'Pick the right answer'},
+  {id:'translation',icon:'✍️',title:'Translation',desc:'Type it in Lithuanian'},
+  {id:'listening',icon:'🔊',title:'Listening',desc:'Hear it, then write it'},
+];
+
+// Helper to build MCQ with auto-generated distractors from a list of LT words
+function mcq(en,lt,ph,pool){
+  const others=pool.filter(w=>w!==lt).sort(()=>Math.random()-.5).slice(0,3);
+  const ci=Math.floor(Math.random()*4);
+  const choices=[...others];choices.splice(ci,0,lt);
+  return {type:'mcq',english:en,lithuanian:lt,phonetic:ph,choices,correctIndex:ci};
+}
+
+// Raw word lists per theme — used to auto-build exercises each session
+const RAW={
+  'Greetings':[
+    ['Hello','Labas','LAH-bahs'],
+    ['Good morning','Labas rytas','LAH-bahs REE-tahs'],
+    ['Good evening','Labas vakaras','LAH-bahs VAH-kah-rahs'],
+    ['Good night','Labanakt','lah-bah-NAKT'],
+    ['Goodbye','Viso gero','VEE-so GEH-ro'],
+    ['See you later','Iki pasimatymo','EE-kee pah-see-mah-TEE-mo'],
+    ['Thank you','Ačiū','AH-choo'],
+    ['Thank you very much','Labai ačiū','LAH-by AH-choo'],
+    ['You\'re welcome','Prašom','PRAH-shom'],
+    ['Please','Prašau','prah-SHOW'],
+    ['Sorry','Atsiprašau','aht-see-prah-SHOW'],
+    ['Excuse me','Atleiskite','aht-LAYS-kee-teh'],
+    ['Yes','Taip','teyp'],
+    ['No','Ne','neh'],
+    ['Maybe','Galbūt','gahl-BOOT'],
+    ['How are you?','Kaip sekasi?','keyp SEH-kah-see'],
+    ['I\'m fine','Man gerai','mahn geh-RY'],
+    ['Nice to meet you','Malonu susipažinti','mah-LOH-noo soo-see-pah-ZHEEN-tee'],
+    ['What is your name?','Koks tavo vardas?','koks TAH-vo VAR-dahs'],
+    ['My name is…','Mano vardas…','MAH-no VAR-dahs'],
+    ['I don\'t understand','Nesuprantu','neh-soo-PRAHN-too'],
+    ['Can you repeat?','Ar galite pakartoti?','ar GAH-lee-teh pah-kar-TOH-tee'],
+    ['Help!','Pagalba!','pah-GAHL-bah'],
+    ['Where is…?','Kur yra…?','koor EE-rah'],
+  ],
+  'Numbers':[
+    ['Zero','Nulis','NOO-lees'],
+    ['One','Vienas','VYEH-nahs'],
+    ['Two','Du','doo'],
+    ['Three','Trys','trees'],
+    ['Four','Keturi','keh-TOO-ree'],
+    ['Five','Penki','PEHN-kee'],
+    ['Six','Šeši','SHEH-shee'],
+    ['Seven','Septyni','sep-TEE-nee'],
+    ['Eight','Aštuoni','ahsh-TWOH-nee'],
+    ['Nine','Devyni','deh-VEE-nee'],
+    ['Ten','Dešimt','DEH-shimt'],
+    ['Eleven','Vienuolika','vyeh-NWOH-lee-kah'],
+    ['Twelve','Dvylika','DVEE-lee-kah'],
+    ['Twenty','Dvidešimt','dvee-DEH-shimt'],
+    ['Thirty','Trisdešimt','trees-DEH-shimt'],
+    ['Fifty','Penkiasdešimt','pen-kyahs-DEH-shimt'],
+    ['One hundred','Šimtas','SHEEM-tahs'],
+    ['One thousand','Tūkstantis','TOOK-stahn-tees'],
+    ['First','Pirmas','PEER-mahs'],
+    ['Second','Antras','AHN-trahs'],
+    ['Third','Trečias','TREH-chyahs'],
+    ['Half','Pusė','POO-seh'],
+    ['Double','Dvigubas','dvee-GOO-bahs'],
+    ['How many?','Kiek?','kyehk'],
+  ],
+  'Colors':[
+    ['Red','Raudona','row-DOH-nah'],
+    ['Blue','Mėlyna','MEH-lee-nah'],
+    ['Green','Žalia','ZHAH-lyah'],
+    ['Yellow','Geltona','gel-TOH-nah'],
+    ['Orange','Oranžinė','oh-rahn-ZHEE-neh'],
+    ['Purple','Violetinė','vyoh-leh-TEE-neh'],
+    ['Pink','Rožinė','roh-ZHEE-neh'],
+    ['White','Balta','BAHL-tah'],
+    ['Black','Juoda','YWOH-dah'],
+    ['Gray','Pilka','PEEL-kah'],
+    ['Brown','Ruda','ROO-dah'],
+    ['Dark blue','Tamsiai mėlyna','tahm-SLYAY MEH-lee-nah'],
+    ['Light blue','Šviesiai mėlyna','shvyeh-SLYAY MEH-lee-nah'],
+    ['Gold','Auksinė','owk-SEE-neh'],
+    ['Silver','Sidabrinė','see-dahb-REE-neh'],
+    ['Beige','Smėlinė','smeh-LEE-neh'],
+    ['Turquoise','Turkio','TOOR-kyoh'],
+    ['Dark','Tamsus','tahm-SOOS'],
+    ['Light','Šviesus','shvyeh-SOOS'],
+    ['Bright','Ryškus','REESH-koos'],
+    ['Pale','Blyškus','BLEESH-koos'],
+    ['Colorful','Spalvingas','spahl-VEEN-gahs'],
+    ['What color?','Kokia spalva?','KOH-kyah spahl-VAH'],
+    ['My favorite color','Mano mėgstamiausia spalva','MAH-no mehg-stah-MYOW-syah spahl-VAH'],
+  ],
+  'Days of the week':[
+    ['Monday','Pirmadienis','peer-mah-DYEH-nees'],
+    ['Tuesday','Antradienis','ahn-trah-DYEH-nees'],
+    ['Wednesday','Trečiadienis','treh-chyah-DYEH-nees'],
+    ['Thursday','Ketvirtadienis','ket-veert-ah-DYEH-nees'],
+    ['Friday','Penktadienis','penk-tah-DYEH-nees'],
+    ['Saturday','Šeštadienis','shesh-tah-DYEH-nees'],
+    ['Sunday','Sekmadienis','sek-mah-DYEH-nees'],
+    ['Today','Šiandien','shyan-DYEHN'],
+    ['Yesterday','Vakar','VAH-kar'],
+    ['Tomorrow','Rytoj','REE-toy'],
+    ['This week','Šią savaitę','shyahn sah-VY-teh'],
+    ['Next week','Kitą savaitę','KEE-tahn sah-VY-teh'],
+    ['Last week','Praėjusią savaitę','prah-EH-yoo-syahn sah-VY-teh'],
+    ['Weekend','Savaitgalis','sah-vyt-GAH-lees'],
+    ['Day','Diena','DYEH-nah'],
+    ['Week','Savaitė','sah-VY-teh'],
+    ['Morning','Rytas','REE-tahs'],
+    ['Afternoon','Popietė','poh-PYEH-teh'],
+    ['Evening','Vakaras','VAH-kah-rahs'],
+    ['Night','Naktis','NAHK-tees'],
+    ['Now','Dabar','dah-BAR'],
+    ['Soon','Netrukus','neh-TROO-koos'],
+    ['Always','Visada','vee-SAH-dah'],
+    ['Never','Niekada','nyeh-KAH-dah'],
+  ],
+  'Family':[
+    ['Mother','Mama','MAH-mah'],
+    ['Father','Tėvas','TEH-vahs'],
+    ['Brother','Brolis','BROH-lees'],
+    ['Sister','Sesuo','seh-SWOH'],
+    ['Son','Sūnus','SOO-noos'],
+    ['Daughter','Dukra','DOOK-rah'],
+    ['Grandmother','Močiutė','moh-CHYOO-teh'],
+    ['Grandfather','Senelis','seh-NEH-lees'],
+    ['Uncle','Dėdė','DEH-deh'],
+    ['Aunt','Teta','TEH-tah'],
+    ['Cousin','Pusbrolis / Pusbrolė','poos-BROH-lees / poos-broh-LEH'],
+    ['Nephew','Sūnėnas','soo-NEH-nahs'],
+    ['Niece','Dukterėčia','dook-teh-REH-chyah'],
+    ['Husband','Vyras','VEE-rahs'],
+    ['Wife','Žmona','ZHMO-nah'],
+    ['Parents','Tėvai','TEH-vy'],
+    ['Children','Vaikai','vy-KY'],
+    ['Baby','Kūdikis','KOO-dee-kees'],
+    ['Family','Šeima','SHAY-mah'],
+    ['Twin','Dvynys','dvee-NEES'],
+    ['In-law (mother)','Uošvė','WOOSH-veh'],
+    ['In-law (father)','Uošvis','WOOSH-vees'],
+    ['Stepfather','Patėvis','pah-TEH-vees'],
+    ['Stepmother','Pamotė','pah-MOH-teh'],
+  ],
+  'Food & drinks':[
+    ['Bread','Duona','DWOH-nah'],
+    ['Water','Vanduo','VAHN-dwoh'],
+    ['Milk','Pienas','PYEH-nahs'],
+    ['Coffee','Kava','KAH-vah'],
+    ['Tea','Arbata','ar-BAH-tah'],
+    ['Juice','Sultys','SOOL-tees'],
+    ['Beer','Alus','AH-loos'],
+    ['Wine','Vynas','VEE-nahs'],
+    ['Apple','Obuolys','oh-BWOH-lees'],
+    ['Orange (fruit)','Apelsinas','ah-pel-SEE-nahs'],
+    ['Banana','Bananas','bah-NAH-nahs'],
+    ['Cheese','Sūris','SOO-rees'],
+    ['Egg','Kiaušinis','kyow-SHEE-nees'],
+    ['Meat','Mėsa','MEH-sah'],
+    ['Fish','Žuvis','ZHOO-vees'],
+    ['Chicken','Vištiena','veesh-TYEH-nah'],
+    ['Rice','Ryžiai','REE-zhyay'],
+    ['Soup','Sriuba','SRYOO-bah'],
+    ['Salad','Salotos','sah-LOH-tos'],
+    ['Cake','Tortas','TOR-tahs'],
+    ['Ice cream','Ledai','LEH-dy'],
+    ['Sugar','Cukrus','TSOOK-roos'],
+    ['Salt','Druska','droos-KAH'],
+    ['Butter','Sviestas','SVYES-tahs'],
+  ],
+  'Animals':[
+    ['Dog','Šuo','shwoh'],
+    ['Cat','Katė','KAH-teh'],
+    ['Horse','Arklys','ARK-lees'],
+    ['Cow','Karvė','KAR-veh'],
+    ['Pig','Kiaulė','KYOW-leh'],
+    ['Sheep','Avis','AH-vees'],
+    ['Bird','Paukštis','POWK-shtees'],
+    ['Fish','Žuvis','ZHOO-vees'],
+    ['Bear','Lokys','LOH-kees'],
+    ['Wolf','Vilkas','VEEL-kahs'],
+    ['Fox','Lapė','LAH-peh'],
+    ['Rabbit','Triušis','TRYOO-shees'],
+    ['Deer','Elnias','EL-nyahs'],
+    ['Frog','Varlė','VAR-leh'],
+    ['Snake','Gyvatė','gee-VAH-teh'],
+    ['Eagle','Erelis','eh-REH-lees'],
+    ['Duck','Antis','AHN-tees'],
+    ['Bee','Bitė','BEE-teh'],
+    ['Butterfly','Drugelis','droo-GEH-lees'],
+    ['Spider','Voras','VOH-rahs'],
+    ['Lion','Liūtas','LYOO-tahs'],
+    ['Elephant','Dramblys','drahm-BLEES'],
+    ['Monkey','Beždžionė','bezh-JYOH-neh'],
+    ['Crocodile','Krokodilas','kroh-koh-DEE-lahs'],
+  ],
+};
+
+const THEMES=Object.keys(RAW);
+let aiPools={};   // theme -> array of extra AI exercises
+let aiFetching=new Set();
+const SESSION_SIZE=10; // exercises per session
+
+function buildPool(theme){
+  // Convert raw words to all 4 exercise types
+  const raw=RAW[theme];
+  const ltWords=raw.map(r=>r[1]);
+  const pool=[];
+  raw.forEach(([en,lt,ph])=>{
+    pool.push({type:'flashcard',english:en,lithuanian:lt,phonetic:ph});
+    pool.push({type:'translation',english:en,lithuanian:lt,phonetic:ph});
+    pool.push({type:'listening',english:en,lithuanian:lt,phonetic:ph});
+    // build MCQ with random distractors from pool
+    const others=ltWords.filter(w=>w!==lt).sort(()=>Math.random()-.5).slice(0,3);
+    const ci=Math.floor(Math.random()*4);
+    const choices=[...others];choices.splice(ci,0,lt);
+    pool.push({type:'mcq',english:en,lithuanian:lt,phonetic:ph,choices,correctIndex:ci});
+  });
+  // Mix in AI extras if available
+  if(aiPools[theme])pool.push(...aiPools[theme]);
+  return pool;
+}
+
+function sampleSession(pool, mode){
+  let filtered=mode==='mix'?pool:pool.filter(e=>e.type===mode);
+  if(!filtered.length)filtered=pool;
+  // Shuffle and pick SESSION_SIZE, ensuring variety of words (not same word twice if possible)
+  const shuffled=[...filtered].sort(()=>Math.random()-.5);
+  const seen=new Set();const result=[];
+  for(const ex of shuffled){
+    if(!seen.has(ex.english)){seen.add(ex.english);result.push(ex);}
+    if(result.length>=SESSION_SIZE)break;
+  }
+  // fill remainder if needed
+  if(result.length<SESSION_SIZE){
+    for(const ex of shuffled){
+      if(result.length>=SESSION_SIZE)break;
+      if(!result.includes(ex))result.push(ex);
+    }
+  }
+  return result;
+}
+
+async function fetchAI(theme){
+  if(aiPools[theme]||aiFetching.has(theme))return;
+  aiFetching.add(theme);
+  const prompt=`Generate 12 Lithuanian language exercises for English speakers on the topic: "${theme}".
+Return ONLY a valid JSON array, no markdown, no backticks.
+Each object: type ("flashcard"|"mcq"|"translation"|"listening"), english, lithuanian, phonetic.
+For mcq: choices (4 Lithuanian strings, correct included), correctIndex (0-3).
+Use 3 of each type. Use different words than these common ones, go deeper into the topic. Be accurate, keep phrases short.`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1600,
+        messages:[{role:'user',content:prompt}]})});
+    const d=await r.json();
+    aiPools[theme]=JSON.parse(d.content[0].text.replace(/```json|```/g,'').trim());
+  }catch(e){}
+  aiFetching.delete(theme);render();
+}
+function prefetchAll(){THEMES.forEach(t=>fetchAI(t));}
+
+let S={screen:'home',theme:null,mode:'mix',exs:[],idx:0,lives:3,score:0,combo:0,errs:[],ans:'',sel:null,revealed:false};
+
+function startSession(){
+  const pool=buildPool(S.theme);
+  S.exs=sampleSession(pool,S.mode);
+  S.idx=0;S.lives=3;S.score=0;S.combo=0;S.errs=[];S.ans='';S.sel=null;S.revealed=false;
+  S.screen='exercise';render();
+}
+
+function advance(){S.idx++;S.sel=null;S.ans='';S.revealed=false;S.screen=(S.lives<=0||S.idx>=S.exs.length)?'summary':'exercise';render();}
+function good(){S.score+=10+S.combo*2;S.combo++;}
+function bad(ex){S.lives--;S.combo=0;if(ex)S.errs.push(ex);}
+
+function norm(s){return s.toLowerCase().trim().replace(/ą/g,'a').replace(/č/g,'c').replace(/ę/g,'e').replace(/ė/g,'e').replace(/į/g,'i').replace(/š/g,'s').replace(/ų/g,'u').replace(/ū/g,'u').replace(/ž/g,'z');}
+function isOk(a,b){return norm(a)===norm(b)||a.toLowerCase().trim()===b.toLowerCase().trim();}
+function speak(txt){const u=new SpeechSynthesisUtterance(txt);u.lang='lt-LT';u.rate=0.75;speechSynthesis.cancel();speechSynthesis.speak(u);}
+function esc(s){return(s||'').replace(/'/g,"\\'");}
+
+function render(){
+  const app=document.getElementById('app');if(!app)return;
+  const m={home:rHome,mode:rMode,exercise:rEx,summary:rSum};
+  app.innerHTML=(m[S.screen]||rHome)();wire();
+}
+
+function rHome(){
+  return `<h2 style="font-size:21px;font-weight:500;margin-bottom:3px;color:var(--color-text-primary)">Lithuanian learner</h2>
+<p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:20px">English → Lithuanian · 24 words per topic</p>
+<div style="display:flex;flex-direction:column;gap:8px;">
+${THEMES.map(t=>{
+  const ready=!!aiPools[t],fetching=aiFetching.has(t);
+  return `<button class="theme-btn" onclick="pickTheme('${t}')">
+    <span>${t}</span>
+    ${ready?`<span class="ready-pill">+AI words</span>`:fetching?`<span class="gen-pill">Loading AI…</span>`:`<span class="gen-pill">24 words</span>`}
+  </button>`;
+}).join('')}
+</div>`;
+}
+
+function rMode(){
+  return `<button class="back-btn" onclick="home()">← Back</button>
+<h2 style="font-size:18px;font-weight:500;margin-bottom:4px;color:var(--color-text-primary)">${S.theme}</h2>
+<p style="font-size:14px;color:var(--color-text-secondary);margin-bottom:18px">Choose your exercise type · ${SESSION_SIZE} questions per session</p>
+<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+${MODES.map(m=>`<button class="mode-btn${S.mode===m.id?' selected':''}" onclick="setMode('${m.id}')">
+  <span class="mode-icon">${m.icon}</span>
+  <span class="mode-info"><span class="mode-title">${m.title}</span><span class="mode-desc">${m.desc}</span></span>
+  ${S.mode===m.id?`<span style="margin-left:auto;font-size:18px">✓</span>`:''}
+</button>`).join('')}
+</div>
+<button class="btn btn-primary" onclick="startSession()">Start — ${SESSION_SIZE} questions</button>`;
+}
+
+function rEx(){
+  const ex=S.exs[S.idx];if(!ex){S.screen='summary';return rSum();}
+  const pct=Math.round(S.idx/S.exs.length*100);
+  const hearts=[0,1,2].map(i=>`<span style="font-size:19px;opacity:${i<S.lives?1:.2}">❤</span>`).join('');
+  const types={flashcard:rFlash,mcq:rMCQ,translation:rTrans,listening:rListen};
+  const modeLabel=MODES.find(m=>m.id===S.mode);
+  return `<div class="meta"><div>${hearts}</div><div class="score-box">Score: <b>${S.score}</b>${S.combo>1?`<span class="combo">×${S.combo}</span>`:''}</div></div>
+<div class="pbar"><div class="pfill" style="width:${pct}%"></div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+  <p style="font-size:11px;color:var(--color-text-secondary)">${S.idx+1} / ${S.exs.length}</p>
+  <p style="font-size:11px;color:var(--color-text-secondary)">${modeLabel?modeLabel.icon+' '+modeLabel.title:''}</p>
+</div>
+${(types[ex.type]||rFlash)(ex)}`;
+}
+
+function rFlash(ex){
+  const rev=S.revealed;
+  return `<div class="card" style="text-align:center;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+<div class="tag">Flashcard</div>
+<div style="font-size:26px;font-weight:500;color:var(--color-text-primary)">${ex.english}</div>
+${rev?`<div style="padding-top:14px;border-top:0.5px solid var(--color-border-tertiary);width:100%;margin-top:6px">
+<div style="font-size:22px;font-weight:500;color:var(--color-text-info)">${ex.lithuanian}</div>
+<div style="font-size:13px;color:var(--color-text-secondary);margin:4px 0">${ex.phonetic}</div>
+<button onclick="speakIt('${esc(ex.lithuanian)}')" style="padding:5px 14px;border:0.5px solid var(--color-border-secondary);border-radius:8px;background:transparent;cursor:pointer;font-size:13px;color:var(--color-text-secondary)">🔊 Hear it</button>
+</div>`:`<div style="color:var(--color-text-secondary);font-size:13px">Tap to reveal</div>`}
+</div>
+${!rev?`<button class="btn btn-primary" onclick="reveal()">Reveal</button>`:
+`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<button class="btn" style="color:var(--color-text-danger)" onclick="mark(false)">Didn't know</button>
+<button class="btn btn-primary" onclick="mark(true)">Knew it!</button>
+</div>`}`;
+}
+
+function rMCQ(ex){
+  const done=S.sel!==null;
+  const btns=ex.choices.map((c,i)=>{
+    let cls='btn';
+    if(done){if(i===ex.correctIndex)cls+=' ok';else if(c===S.sel)cls+=' ko';}
+    return `<button class="${cls}" onclick="pickMCQ('${esc(c)}',${i})">${c}</button>`;
+  }).join('');
+  return `<div class="card" style="margin-bottom:12px">
+<div class="tag">Multiple choice</div>
+<div style="font-size:15px;color:var(--color-text-secondary);margin-bottom:6px">How do you say in Lithuanian:</div>
+<div style="font-size:24px;font-weight:500;color:var(--color-text-primary)">"${ex.english}"</div>
+${done?`<div class="hint">Phonetic: ${ex.phonetic}</div>`:''}
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">${btns}</div>`;
+}
+
+function rTrans(ex){
+  const done=S.sel!==null;const ok=done&&isOk(S.ans,ex.lithuanian);
+  return `<div class="card" style="margin-bottom:12px">
+<div class="tag">Translation</div>
+<div style="font-size:15px;color:var(--color-text-secondary);margin-bottom:6px">Translate to Lithuanian:</div>
+<div style="font-size:24px;font-weight:500;color:var(--color-text-primary)">"${ex.english}"</div>
+${done?`<div class="hint">Phonetic: ${ex.phonetic}</div>`:''}
+</div>
+<input type="text" id="ti" value="${esc(S.ans)}" placeholder="Type in Lithuanian… (diacritics optional)" ${done?'disabled':''}
+  style="margin-bottom:8px;${done?`border-color:${ok?'var(--color-border-success)':'var(--color-border-danger)'}`:''}">
+<p style="font-size:11px;color:var(--color-text-secondary);margin-bottom:10px">Diacritics (ą č ę ė…) are optional</p>
+${done?`<div class="fb ${ok?'ok':'ko'}">${ok?'Correct! ✓':`Correct answer: <b>${ex.lithuanian}</b>`}</div>`:`<button class="btn btn-primary" onclick="checkTrans()">Check</button>`}`;
+}
+
+function rListen(ex){
+  const done=S.sel!==null;const ok=done&&isOk(S.ans,ex.lithuanian);
+  return `<div class="card" style="margin-bottom:12px">
+<div class="tag">Listening</div>
+<div style="font-size:15px;color:var(--color-text-secondary);margin-bottom:14px">Listen, then write what you hear:</div>
+<button onclick="speakIt('${esc(ex.lithuanian)}')" style="display:block;margin:0 auto;width:70px;height:70px;border:0.5px solid var(--color-border-secondary);border-radius:50%;background:var(--color-background-secondary);cursor:pointer;font-size:28px;">🔊</button>
+${done?`<div style="text-align:center;margin-top:10px;font-size:13px;color:var(--color-text-secondary)">${ex.lithuanian} · ${ex.phonetic}<br><span style="font-size:11px">(${ex.english})</span></div>`:''}
+</div>
+<input type="text" id="li" value="${esc(S.ans)}" placeholder="Write what you heard…" ${done?'disabled':''}
+  style="margin-bottom:8px;${done?`border-color:${ok?'var(--color-border-success)':'var(--color-border-danger)'}`:''}">
+${done?`<div class="fb ${ok?'ok':'ko'}">${ok?'Correct! ✓':`Correct answer: <b>${ex.lithuanian}</b>`}</div>`:`<button class="btn btn-primary" onclick="checkListen()">Check</button>`}`;
+}
+
+function rSum(){
+  const total=S.exs.length;
+  const pct=total>0?Math.round(((total-S.errs.length)/total)*100):0;
+  const icon=pct>=80?'🎉':pct>=50?'👍':'📚';
+  const modeLabel=MODES.find(m=>m.id===S.mode);
+  return `<div style="text-align:center;padding:1.5rem 0 1rem">
+<div style="font-size:44px;margin-bottom:8px">${icon}</div>
+<h2 style="font-size:21px;font-weight:500;margin-bottom:2px">Session complete!</h2>
+<p style="color:var(--color-text-secondary);font-size:14px">${S.theme} · ${modeLabel?modeLabel.icon+' '+modeLabel.title:''}</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+<div class="stat"><p>Score</p><h3>${S.score}</h3></div>
+<div class="stat"><p>Accuracy</p><h3>${pct}%</h3></div>
+<div class="stat"><p>Lives left</p><h3>${S.lives}</h3></div>
+</div>
+${S.errs.length?`<div class="card" style="margin-bottom:14px">
+<div style="font-size:13px;font-weight:500;color:var(--color-text-danger);margin-bottom:8px">Review these words:</div>
+${S.errs.map(e=>`<div class="err-row"><span style="color:var(--color-text-secondary)">${e.english}</span><span style="font-weight:500">${e.lithuanian}</span></div>`).join('')}
+</div>`:''}
+<div style="display:flex;flex-direction:column;gap:8px">
+<button class="btn btn-primary" onclick="startSession()">New session — different words</button>
+<button class="btn" onclick="goMode()">Change exercise type</button>
+<button class="btn" onclick="home()">Choose another topic</button>
+</div>`;
+}
+
+function wire(){
+  const ti=document.getElementById('ti');
+  if(ti){ti.focus();ti.addEventListener('input',e=>S.ans=e.target.value);ti.addEventListener('keydown',e=>{if(e.key==='Enter')checkTrans();});}
+  const li=document.getElementById('li');
+  if(li){li.focus();li.addEventListener('input',e=>S.ans=e.target.value);li.addEventListener('keydown',e=>{if(e.key==='Enter')checkListen();});}
+}
+
+window.pickTheme=t=>{S.theme=t;S.mode='mix';S.screen='mode';render();};
+window.setMode=m=>{S.mode=m;render();};
+window.goMode=()=>{S.screen='mode';render();};
+window.home=()=>{S.screen='home';render();};
+window.startSession=startSession;
+window.reveal=()=>{S.revealed=true;render();};
+window.speakIt=t=>speak(t);
+window.mark=knew=>{knew?good():bad(S.exs[S.idx]);advance();};
+window.pickMCQ=(c,i)=>{
+  if(S.sel!==null)return;
+  const ex=S.exs[S.idx];S.sel=c;
+  i===ex.correctIndex?good():bad(ex);render();setTimeout(advance,1400);
+};
+window.checkTrans=()=>{
+  if(S.sel!==null)return;
+  const inp=document.getElementById('ti');if(inp)S.ans=inp.value;
+  if(!S.ans.trim())return;
+  const ex=S.exs[S.idx];S.sel=S.ans;
+  isOk(S.ans,ex.lithuanian)?good():bad(ex);render();setTimeout(advance,2000);
+};
+window.checkListen=()=>{
+  if(S.sel!==null)return;
+  const inp=document.getElementById('li');if(inp)S.ans=inp.value;
+  if(!S.ans.trim())return;
+  const ex=S.exs[S.idx];S.sel=S.ans;
+  isOk(S.ans,ex.lithuanian)?good():bad(ex);render();setTimeout(advance,2000);
+};
+
+render();
+prefetchAll();
+</script>
 </body>
 </html>
